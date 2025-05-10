@@ -53241,6 +53241,9 @@ ORIGIN: ../../../flutter/shell/platform/linux/fl_compositor.h + ../../../flutter
 ORIGIN: ../../../flutter/shell/platform/linux/fl_compositor_opengl.cc + ../../../flutter/LICENSE
 ORIGIN: ../../../flutter/shell/platform/linux/fl_compositor_opengl.h + ../../../flutter/LICENSE
 ORIGIN: ../../../flutter/shell/platform/linux/fl_compositor_opengl_test.cc + ../../../flutter/LICENSE
+ORIGIN: ../../../flutter/shell/platform/linux/fl_compositor_software.cc + ../../../flutter/LICENSE
+ORIGIN: ../../../flutter/shell/platform/linux/fl_compositor_software.h + ../../../flutter/LICENSE
+ORIGIN: ../../../flutter/shell/platform/linux/fl_compositor_software_test.cc + ../../../flutter/LICENSE
 ORIGIN: ../../../flutter/shell/platform/linux/fl_dart_project.cc + ../../../flutter/LICENSE
 ORIGIN: ../../../flutter/shell/platform/linux/fl_dart_project_private.h + ../../../flutter/LICENSE
 ORIGIN: ../../../flutter/shell/platform/linux/fl_dart_project_test.cc + ../../../flutter/LICENSE
@@ -56272,6 +56275,9 @@ FILE: ../../../flutter/shell/platform/linux/fl_compositor.h
 FILE: ../../../flutter/shell/platform/linux/fl_compositor_opengl.cc
 FILE: ../../../flutter/shell/platform/linux/fl_compositor_opengl.h
 FILE: ../../../flutter/shell/platform/linux/fl_compositor_opengl_test.cc
+FILE: ../../../flutter/shell/platform/linux/fl_compositor_software.cc
+FILE: ../../../flutter/shell/platform/linux/fl_compositor_software.h
+FILE: ../../../flutter/shell/platform/linux/fl_compositor_software_test.cc
 FILE: ../../../flutter/shell/platform/linux/fl_dart_project.cc
 FILE: ../../../flutter/shell/platform/linux/fl_dart_project_private.h
 FILE: ../../../flutter/shell/platform/linux/fl_dart_project_test.cc
