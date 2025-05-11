@@ -29,6 +29,12 @@ const double _kRoundedDeviceCornersThreshold = 20.0;
 // iOS 18.0.
 const double _kTopGapRatio = 0.08;
 
+// The minimum distance (i.e., maximum upward stretch) from the top of the sheet
+// to the top of the screen, as a ratio of total screen height. This value represents
+// how far the sheet can be temporarily pulled upward before snapping back.
+// Determined through visual tuning to feel natural on iOS 18.0 simulators.
+const double _kMaxTopGapRatio = 0.072;
+
 // Tween for animating a Cupertino sheet onto the screen.
 //
 // Begins fully offscreen below the screen and ends onscreen with a small gap at
@@ -335,7 +341,6 @@ class CupertinoSheetTransition extends StatefulWidget {
 class _CupertinoSheetTransitionState extends State<CupertinoSheetTransition>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  // late Animation<Offset> _positionAnimation;
   late Animation<double> _paddingAnimation;
 
   // The offset animation when this page is being covered by another sheet.
@@ -353,12 +358,13 @@ class _CupertinoSheetTransitionState extends State<CupertinoSheetTransition>
   @override
   void initState() {
     super.initState();
+
     _controller = AnimationController(
       duration: const Duration(microseconds: 1),
       reverseDuration: const Duration(milliseconds: 180),
       vsync: this,
     );
-    _paddingAnimation = _controller.drive(Tween<double>(begin: _kTopGapRatio, end: 0.072));
+
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
         statusBarBrightness: Brightness.dark,
@@ -395,6 +401,9 @@ class _CupertinoSheetTransitionState extends State<CupertinoSheetTransition>
       curve: Curves.linearToEaseOut,
       reverseCurve: Curves.easeInToLinear,
       parent: widget.secondaryRouteAnimation,
+    );
+    _paddingAnimation = _controller.drive(
+      Tween<double>(begin: _kTopGapRatio, end: _kMaxTopGapRatio),
     );
     _secondaryPositionAnimation = _secondaryPositionCurve!.drive(_kMidUpTween);
     _secondaryScaleAnimation = _secondaryPositionCurve!.drive(_kScaleTween);
@@ -453,9 +462,7 @@ class _CupertinoSheetTransitionState extends State<CupertinoSheetTransition>
           animation: _paddingAnimation,
           builder: (BuildContext context, Widget? child) {
             return Padding(
-              padding: EdgeInsets.only(
-                top: MediaQuery.sizeOf(context).height * _paddingAnimation.value,
-              ),
+              padding: EdgeInsets.only(top: MediaQuery.heightOf(context) * _paddingAnimation.value),
               child: _coverSheetSecondaryTransition(
                 widget.secondaryRouteAnimation,
                 _coverSheetPrimaryTransition(
@@ -731,7 +738,7 @@ class _CupertinoDownGestureDetectorState<T> extends State<_CupertinoDownGestureD
     _downGestureController!.dragUpdate(
       // Divide by size of the sheet.
       details.primaryDelta! / (context.size!.height - (context.size!.height * _kTopGapRatio)),
-      details.primaryDelta! / (context.size!.height * 0.008),
+      details.primaryDelta! / (context.size!.height * (_kTopGapRatio - _kMaxTopGapRatio)),
       provider!.controller,
     );
   }
