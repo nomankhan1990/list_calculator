@@ -697,10 +697,12 @@ class _CupertinoDragGestureDetectorState<T> extends State<_CupertinoDragGestureD
   _CupertinoDownGestureController<T>? _downGestureController;
 
   late VerticalDragGestureRecognizer _recognizer;
+  _AnimationControllerProvider? provider;
 
   @override
   void initState() {
     super.initState();
+    provider ??= _AnimationControllerProvider.of(context);
     _recognizer =
         VerticalDragGestureRecognizer(debugOwner: this)
           ..onStart = _handleDragStart
@@ -734,7 +736,6 @@ class _CupertinoDragGestureDetectorState<T> extends State<_CupertinoDragGestureD
   void _handleDragUpdate(DragUpdateDetails details) {
     assert(mounted);
     assert(_downGestureController != null);
-    final _AnimationControllerProvider? provider = _AnimationControllerProvider.of(context);
     _downGestureController!.dragUpdate(
       // Divide by size of the sheet.
       details.primaryDelta! / (context.size!.height - (context.size!.height * _kTopGapRatio)),
@@ -746,7 +747,6 @@ class _CupertinoDragGestureDetectorState<T> extends State<_CupertinoDragGestureD
   void _handleDragEnd(DragEndDetails details) {
     assert(mounted);
     assert(_downGestureController != null);
-    final _AnimationControllerProvider? provider = _AnimationControllerProvider.of(context);
     _downGestureController!.dragEnd(
       details.velocity.pixelsPerSecond.dy / context.size!.height,
       provider!.controller,
@@ -758,7 +758,6 @@ class _CupertinoDragGestureDetectorState<T> extends State<_CupertinoDragGestureD
     assert(mounted);
     // This can be called even if start is not called, paired with the "down" event
     // that we don't consider here.
-    final _AnimationControllerProvider? provider = _AnimationControllerProvider.of(context);
     _downGestureController?.dragEnd(0.0, provider!.controller);
     _downGestureController = null;
   }
@@ -808,6 +807,10 @@ class _CupertinoDownGestureController<T> {
   /// The drag gesture has ended with a vertical motion of [velocity] as a
   /// fraction of screen height per second.
   void dragEnd(double velocity, AnimationController paddingController) {
+    if (paddingController.value > 0) {
+      paddingController.reverse();
+    }
+
     // Fling in the appropriate direction.
     //
     // This curve has been determined through rigorously eyeballing native iOS
@@ -815,7 +818,6 @@ class _CupertinoDownGestureController<T> {
     const Curve animationCurve = Curves.easeOut;
     final bool isCurrent = getIsCurrent();
     final bool animateForward;
-    paddingController.reverse();
 
     if (!isCurrent) {
       // If the page has already been navigated away from, then the animation
