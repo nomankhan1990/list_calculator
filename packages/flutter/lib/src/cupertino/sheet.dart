@@ -651,7 +651,7 @@ mixin _CupertinoSheetRouteTransitionMixin<T> on PageRoute<T> {
       primaryRouteAnimation: animation,
       secondaryRouteAnimation: secondaryAnimation,
       linearTransition: linearTransition,
-      child: _CupertinoDownGestureDetector<T>(
+      child: _CupertinoDragGestureDetector<T>(
         enabledCallback: () => enableDrag,
         onStartPopGesture: () => _startPopGesture<T>(route),
         child: child,
@@ -675,8 +675,8 @@ mixin _CupertinoSheetRouteTransitionMixin<T> on PageRoute<T> {
   }
 }
 
-class _CupertinoDownGestureDetector<T> extends StatefulWidget {
-  const _CupertinoDownGestureDetector({
+class _CupertinoDragGestureDetector<T> extends StatefulWidget {
+  const _CupertinoDragGestureDetector({
     super.key,
     required this.enabledCallback,
     required this.onStartPopGesture,
@@ -690,10 +690,10 @@ class _CupertinoDownGestureDetector<T> extends StatefulWidget {
   final ValueGetter<_CupertinoDownGestureController<T>> onStartPopGesture;
 
   @override
-  _CupertinoDownGestureDetectorState<T> createState() => _CupertinoDownGestureDetectorState<T>();
+  _CupertinoDragGestureDetectorState<T> createState() => _CupertinoDragGestureDetectorState<T>();
 }
 
-class _CupertinoDownGestureDetectorState<T> extends State<_CupertinoDownGestureDetector<T>> {
+class _CupertinoDragGestureDetectorState<T> extends State<_CupertinoDragGestureDetector<T>> {
   _CupertinoDownGestureController<T>? _downGestureController;
 
   late VerticalDragGestureRecognizer _recognizer;
